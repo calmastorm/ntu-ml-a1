@@ -15,10 +15,17 @@ print(f'x test: {X_test.shape}, y test: {y_test.shape}')
 C_values = [0.01, 0.05, 0.1, 0.5, 1]
 results_linear = {}
 
+gamma_values = [0.01, 0.05, 0.1, 0.5, 1]
+results_rbf = {}
+
 for C in C_values:
-    print(f'Training with C={C}')
-    model = SVC(kernel="linear", C=C)
-    scores = cross_val_score(model, X_train, y_train, cv=3)
-    results_linear[C] = scores.mean()
+    print(f'Train with C={C}')
+    for gamma in gamma_values:
+        print(f'Train with gamma={gamma}')
+        model = SVC(kernel="rbf", C=C, gamma=gamma)
+        scores = cross_val_score(model, X_train, y_train, cv=3)
+        results_rbf[(C, gamma)] = scores.mean()
+        print(f'Done with gamma={gamma}')
     print(f'Done with C={C}')
-print("Linear Kernel Results:", results_linear)
+
+print("RBF Kernel Results:", results_rbf)
